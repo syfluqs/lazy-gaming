@@ -2,6 +2,7 @@
 
 import subprocess
 import sys
+import os
 import time
 
 class android_com(object):
@@ -135,10 +136,15 @@ class android_com(object):
             return 1
         return 0
 
-    def screenshot(self, out_dir=''):
+    def bashscript(self, filename):
+        self.adb('push %s /sdcard/tmp.sh'%(filename))
+        self.shell('sh /sdcard/tmp.sh')
+        self.shell('rm /sdcard/tmp.sh')
+
+    def screenshot(self, out_dir=os.getcwd()):
         self.shell('screencap -p /sdcard/tmp.png')
-        self.shell('pull /sdcard/screen.png %s'%(out_dir))
-        self.shell('shell rm /sdcard/tmp.png')
+        self.adb('pull /sdcard/tmp.png %s'%(out_dir))
+        self.shell('rm /sdcard/tmp.png')
 
 
 """
@@ -259,5 +265,4 @@ class android_com(object):
 if __name__ == '__main__':
     #connect to first android device connected and print date
     a = android_com(1)
-    a.keycode('KEYCODE_MENU', True ,500)
-    a.swipe(100,100,500,100,50)
+    a.screenshot()
