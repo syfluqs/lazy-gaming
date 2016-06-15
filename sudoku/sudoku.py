@@ -3,6 +3,9 @@ import time
 t = time.time()
 
 from cv2 import *
+#for importing custom modules
+import sys
+sys.path.insert(0, '../lib')
 import android_connect
 import gridmaker
 import numpy as np
@@ -20,6 +23,17 @@ for i in xrange(9):
 #initialising connetion to phone
 print "> Initialising connection to phone > "+str(time.time()-t)
 phone = android_connect.android_com(1)
+if not phone.dev_detected:
+    quit()
+    
+
+"""
+phone.tap(520,777,100)
+phone.tap(461,721,100)
+phone.tap(441,1454,100)
+time.sleep(0.5)
+"""
+
 phone.screenshot()
 
 img = imread('tmp.png')
@@ -88,7 +102,8 @@ for i in enumerate(input_board):
     if not i[1]:
         adbtemp.write("input tap %d %d\n"%((grid.getGridCoord(i[0])[0]+grid.getGridCoord(i[0])[2])/2,(grid.getGridCoord(i[0])[1]+grid.getGridCoord(i[0])[3])/2))
         ans = int(out[i[0]])
-        adbtemp.write("input tap %d %d\n"%(buttons[ans-1][0], buttons[ans-1][1]))
+        #adbtemp.write("input tap %d %d\n"%(buttons[ans-1][0], buttons[ans-1][1]))
+        adbtemp.write("input keyevent %d\n"%(ans+7))
 adbtemp.close()
 phone.bashscript('adbtemp.sh')
 os.remove('adbtemp.sh')
