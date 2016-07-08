@@ -1,4 +1,5 @@
 #!/bin/env python2
+
 import time
 t = time.time()
 
@@ -40,6 +41,20 @@ img = imread('tmp.png')
 (h, w, ch) = img.shape
 
 def compare(img, template, threshold=0.80):
+    """Template matching function
+    
+    Uses template matching to find the template in img
+    
+    Arguments:
+        img {[type]} -- [description]
+        template {[type]} -- [description]
+    
+    Keyword Arguments:
+        threshold {number} -- [description] (default: {0.80})
+    
+    Returns:
+        bool -- [description]
+    """
     res = matchTemplate(img, template, TM_CCOEFF_NORMED)
     l = np.where(res>=threshold)
     l = zip(*l)
